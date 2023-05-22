@@ -1,40 +1,54 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { styled } from 'styled-components';
-import Logout from './Logout';
-import ChatInput from './ChatInput';
+import React, { useEffect, useRef, useState } from "react"
+import { styled } from "styled-components"
+import Logout from "./Logout"
+import ChatInput from "./ChatInput"
+import axios from "axios"
+import { getAllMessageRoute, sendMessageRoute } from "../utils/APIroute"
 
-function ChatRoom({currentChat}) {
-    const [messages, setMessages] = useState([]);
-    const scrollRef = useRef();
-    const [arrivalMessage, setArrivalMessage] = useState(null);
+function ChatRoom({ currentChat }) {
+  const [messages, setMessages] = useState([])
+  const scrollRef = useRef()
+  const [arrivalMessage, setArrivalMessage] = useState(null)
 
-    const handleSendMsg = async (msg) => {
-        const data = await JSON.parse(
-          localStorage.getItem('spiel-user')
-        );
-        // socket.current.emit("send-msg", {
-        //   to: currentChat._id,
-        //   from: data._id,
-        //   msg,
-        // });
-        // await axios.post(sendMessageRoute, {
-        //   from: data._id,
-        //   to: currentChat._id,
-        //   message: msg,
-        // });
-    
-        const msgs = [...messages];
-        msgs.push({ fromSelf: true, message: msg });
-        setMessages(msgs);
-      };
+  const handleSendMsg = async (msg) => {
+    const data = await JSON.parse(localStorage.getItem("spiel-user"))
+    // socket.current.emit("send-msg", {
+    //   to: currentChat._id,
+    //   from: data._id,
+    //   msg,
+    // });
+    await axios.post(sendMessageRoute, {
+      from: data._id,
+      to: currentChat._id,
+      message: msg,
+    })
 
-    useEffect(() => {
-        arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
-      }, [arrivalMessage]);
-    
-      useEffect(() => {
-        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, [messages]);
+    const msgs = [...messages]
+    msgs.push({ fromSelf: true, message: msg })
+    setMessages(msgs)
+  }
+
+  useEffect(() => {
+    arrivalMessage && setMessages((prev) => [...prev, arrivalMessage])
+  }, [arrivalMessage])
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
+
+  useEffect(() => {
+    const getMessage = async () => {
+      const data = await JSON.parse(localStorage.getItem("spiel-user"))
+      const response = await axios.post(getAllMessageRoute, {
+        from: data._id,
+        to: currentChat._id,
+      })
+
+      setMessages(response.data)
+    }
+
+    getMessage()
+  }, [currentChat])
 
   return (
     <Container>
@@ -53,9 +67,9 @@ function ChatRoom({currentChat}) {
         <Logout />
       </div>
       <div className="chat-messages">
-        {messages.map((message) => {
+        {messages.map((message, idx) => {
           return (
-            <div ref={scrollRef}>
+            <div ref={scrollRef} key={message + idx}>
               <div
                 className={`message ${
                   message.fromSelf ? "sended" : "recieved"
@@ -66,7 +80,7 @@ function ChatRoom({currentChat}) {
                 </div>
               </div>
             </div>
-          );
+          )
         })}
       </div>
       <ChatInput handleSendMsg={handleSendMsg} />

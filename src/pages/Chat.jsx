@@ -48,7 +48,11 @@ function Chat() {
           user={currentUser}
           setCurrentChat={setCurrentChat}
         />
-        {currentChat ? <ChatRoom currentChat={currentChat} /> : <Welcome user={currentUser} />}
+        {currentChat ? (
+          <ChatRoom currentChat={currentChat} />
+        ) : (
+          <Welcome user={currentUser} />
+        )}
       </div>
     </Container>
   )

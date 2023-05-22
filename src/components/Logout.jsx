@@ -11,8 +11,8 @@ export default function Logout() {
     const id = await JSON.parse(localStorage.getItem("spiel-user"))._id
     // const data = await axios.get(`${logoutRoute}/${id}`)
     // if (data.status === 200) {
-      localStorage.clear()
-      navigate("/login")
+    localStorage.clear()
+    navigate("/login")
     // }
   }
   return (

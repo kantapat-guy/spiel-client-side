@@ -12,9 +12,9 @@ function Welcome({ user }) {
 
   return (
     <Container>
-        <div className="img">
-      <Lottie options={lottieOption} />
-        </div>
+      <div className="img">
+        <Lottie options={lottieOption} />
+      </div>
       <h1>{`Welcome, ${user.username}`}</h1>
       <p>Please select a chat to start messaging</p>
     </Container>
@@ -28,7 +28,7 @@ const Container = styled.div`
   flex-direction: column;
   color: white;
   .img {
-    width: 40vw;
+    height: 30vh;
     /* @media screen and (min-width: 720px) {
         width: 50%;
     } */

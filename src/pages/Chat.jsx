@@ -1,18 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import { styled } from "styled-components"
-import { allUsersRoute } from "../utils/APIroute"
+import { allUsersRoute, host } from "../utils/APIroute"
 import Contact from "../components/Contact"
 import Welcome from "../components/Welcome"
 import ChatRoom from "../components/ChatRoom"
+import { io } from "socket.io-client"
+
+const socket = io.connect(host)
 
 function Chat() {
   const [contact, setContact] = useState([])
   const [currentUser, setCurrentUser] = useState("")
   const [currentChat, setCurrentChat] = useState("")
+
   const navigate = useNavigate()
+
+
+  useEffect(() => {
+    if (currentUser) {
+      socket.emit("add-user", currentUser._id)
+    }
+  }, [currentUser])
 
   useEffect(() => {
     if (!localStorage.getItem("spiel-user")) {
@@ -49,7 +60,7 @@ function Chat() {
           setCurrentChat={setCurrentChat}
         />
         {currentChat ? (
-          <ChatRoom currentChat={currentChat} />
+          <ChatRoom currentChat={currentChat} socket={socket} />
         ) : (
           <Welcome user={currentUser} />
         )}

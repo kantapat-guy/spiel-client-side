@@ -4,19 +4,20 @@ import Logout from "./Logout"
 import ChatInput from "./ChatInput"
 import axios from "axios"
 import { getAllMessageRoute, sendMessageRoute } from "../utils/APIroute"
+import { v4 as uuidv4 } from "uuid"
 
-function ChatRoom({ currentChat }) {
+function ChatRoom({ currentChat, socket }) {
   const [messages, setMessages] = useState([])
   const scrollRef = useRef()
   const [arrivalMessage, setArrivalMessage] = useState(null)
 
   const handleSendMsg = async (msg) => {
     const data = await JSON.parse(localStorage.getItem("spiel-user"))
-    // socket.current.emit("send-msg", {
-    //   to: currentChat._id,
-    //   from: data._id,
-    //   msg,
-    // });
+    socket.emit("send-msg", {
+      to: currentChat._id,
+      from: data._id,
+      msg,
+    })
     await axios.post(sendMessageRoute, {
       from: data._id,
       to: currentChat._id,
@@ -29,12 +30,28 @@ function ChatRoom({ currentChat }) {
   }
 
   useEffect(() => {
+    console.log(arrivalMessage)
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage])
   }, [arrivalMessage])
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
+
+  useEffect(() => {
+    let ignore = false
+
+    if (!ignore) {
+      socket.on("recieve-msg", (msg) => {
+        console.log(msg)
+        setArrivalMessage({ fromSelf: false, message: msg })
+      })
+    }
+
+    return () => {
+      ignore = true
+    }
+  }, [socket])
 
   useEffect(() => {
     const getMessage = async () => {
@@ -49,6 +66,8 @@ function ChatRoom({ currentChat }) {
 
     getMessage()
   }, [currentChat])
+
+  console.log(uuidv4())
 
   return (
     <Container>
@@ -149,13 +168,13 @@ const Container = styled.div`
     .sended {
       justify-content: flex-end;
       .content {
-        background-color: #4f04ff21;
+        background-color: #4f04ff56;
       }
     }
     .recieved {
       justify-content: flex-start;
       .content {
-        background-color: #9900ff20;
+        background-color: #cd81ff85;
       }
     }
   }

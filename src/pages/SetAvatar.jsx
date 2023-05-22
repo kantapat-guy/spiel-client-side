@@ -13,7 +13,7 @@ import { Buffer } from "buffer"
 function SetAvatar() {
   // State
   const [avatar, setAvatar] = useState([])
-  const [selectedAvatar, setSelectedAvatar] = useState("")
+  const [selectedAvatar, setSelectedAvatar] = useState(0)
   const [loading, setLoading] = useState(true)
 
   const api = "https://api.multiavatar.com"
@@ -32,7 +32,7 @@ function SetAvatar() {
   }
 
   const setProfileAvatar = async () => {
-    if (!selectedAvatar) {
+    if (selectedAvatar < 0) {
       toast.error("Please select your avatar", {
         ...option,
         hideProgressBar: true,
@@ -40,24 +40,37 @@ function SetAvatar() {
       })
     } else {
       const user = await JSON.parse(localStorage.getItem("spiel-user"))
-      const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
+      await axios.post(`${setAvatarRoute}/${user._id}`, {
         image: avatar[selectedAvatar],
-      })
-
-      if (data.isSet) {
+      }).then((res) => {
         user.isAvatarImageSet = true
-        user.avatarImage = data.image
-        localStorage.setItem("spiel-user", JSON.stringify(user))
+        user.avatarImage = res.data.image
         setLoading(true)
+        localStorage.setItem("spiel-user", JSON.stringify(user))
         setTimeout(() => {
           setLoading(false)
           navigate("/")
         }, 1500)
-      } else {
+      }).catch((error) => {
         toast.error("Error while save your avatar, Please try again.", option)
-      }
+      })
+      
+      // if (data.isSet) {
+      //   localStorage.setItem("spiel-user", JSON.stringify(user))
+      //   setLoading(true)
+      //   setTimeout(() => {
+      //     setLoading(false)
+      //     navigate("/")
+      //   }, 1500)
+      // } else {
+      //   toast.error("Error while save your avatar, Please try again.", option)
+      // }
     }
   }
+
+  useEffect(() => {
+    console.log(selectedAvatar);
+  })
 
   useEffect(() => {
     const getAvatar = async () => {
@@ -77,7 +90,7 @@ function SetAvatar() {
       //     `${api}/${Math.floor(Math.random() * 10000)}?apikey=XT0rZxthwpOgRN`
       //   )
 
-      //   const buffer = new Buffer(image.data)
+      //   const buffer = new B1uffer(image.data)
       //   data.push(buffer.toString("base64"))
       // }
 

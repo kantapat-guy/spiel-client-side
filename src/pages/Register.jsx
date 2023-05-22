@@ -26,27 +26,50 @@ function Register() {
     const { username, password, confirmPassword, email } = value
     e.preventDefault()
     if (handleValidate(username, password, confirmPassword, email)) {
-      const { data } = await axios.post(registerRoute, {
-        username,
-        email,
-        password,
-      })
-
-      if (data.status === false) {
-        toast.error(data.msg, {
-          position: "bottom-right",
-          autoClose: false,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "dark",
+      let data
+      await axios
+        .post(registerRoute, {
+          username,
+          email,
+          password,
         })
-      } else {
+        .then((response) => (data = response.data))
+        .catch((error) => {
+          console.log(error.message)
+          toast.error(error?.response.data.msg, {
+            position: "bottom-right",
+            autoClose: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "dark",
+          })
+        })
+
+      console.log(data)
+
+      if (data) {
         toast.success("Create a user success.", option)
         localStorage.setItem("spiel-user", JSON.stringify(data.createUser))
         setTimeout(() => {
           navigate("/")
         }, 3000)
       }
+
+      // if (data.status === false) {
+      //   toast.error(data.msg, {
+      //     position: "bottom-right",
+      //     autoClose: false,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     theme: "dark",
+      //   })
+      // } else {
+      //   toast.success("Create a user success.", option)
+      //   localStorage.setItem("spiel-user", JSON.stringify(data.createUser))
+      //   setTimeout(() => {
+      //     navigate("/")
+      //   }, 3000)
+      // }
     }
   }
 
@@ -79,10 +102,10 @@ function Register() {
   }
 
   useEffect(() => {
-    if(localStorage.getItem('spiel-user')) {
-        navigate('/')
+    if (localStorage.getItem("spiel-user")) {
+      navigate("/")
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

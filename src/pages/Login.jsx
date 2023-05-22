@@ -40,6 +40,7 @@ function Login() {
       } else {
         toast.success("Login success.", option)
         localStorage.setItem("spiel-user", JSON.stringify(data.existedUser))
+        navigate('/')
       }
     }
   }

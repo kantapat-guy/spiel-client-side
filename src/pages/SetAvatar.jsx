@@ -116,11 +116,24 @@ function SetAvatar() {
     getAvatar()
   }, [])
 
+  useEffect(() => {
+    if (!localStorage.getItem("spiel-user")) {
+      navigate("/login")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <>
       {loading ? (
         <Container>
-          <Lottie  animationData={dotLoading} loop={true} autoPlay={true} height={400} width={400} />
+          <Lottie
+            animationData={dotLoading}
+            loop={true}
+            autoPlay={true}
+            height={400}
+            width={400}
+          />
         </Container>
       ) : (
         <Container>

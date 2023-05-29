@@ -17,10 +17,6 @@ function Contact({ contact, user, setCurrentChat }) {
     }
   }, [user])
 
-  // useEffect(() => {
-  //   console.log(currentSelected, user)
-  // }, [currentSelected, user])
-
   return (
     <>
       {currentUser && (

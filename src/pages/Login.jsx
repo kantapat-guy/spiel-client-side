@@ -38,7 +38,6 @@ function Login() {
           navigate("/")
         })
         .catch((error) => {
-          console.log(error.message)
           toast.error(error?.response.data.msg, {
             position: "bottom-right",
             autoClose: false,

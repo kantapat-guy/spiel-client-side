@@ -35,7 +35,6 @@ function Register() {
         })
         .then((response) => (data = response.data))
         .catch((error) => {
-          console.log(error.message)
           toast.error(error?.response.data.msg, {
             position: "bottom-right",
             autoClose: false,
@@ -45,7 +44,6 @@ function Register() {
           })
         })
 
-      console.log(data)
 
       if (data) {
         toast.success("Create a user success.", option)

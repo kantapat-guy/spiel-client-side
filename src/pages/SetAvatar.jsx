@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { styled } from "styled-components"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import Lottie from "react-lottie"
-import * as dotLoading from "../assets/dot-loading.json"
+import Lottie from "lottie-react"
+import dotLoading from "../assets/dot-loading.json"
 
 import axios from "axios"
 import { setAvatarRoute } from "../utils/APIroute"
@@ -25,11 +25,11 @@ function SetAvatar() {
     theme: "dark",
   }
 
-  const lottieOption = {
-    loop: true,
-    autoplay: true,
-    animationData: dotLoading,
-  }
+  // const lottieOption = {
+  //   loop: true,
+  //   autoplay: true,
+  //   animationData: dotLoading,
+  // }
 
   const setProfileAvatar = async () => {
     if (selectedAvatar < 0) {
@@ -70,10 +70,6 @@ function SetAvatar() {
       // }
     }
   }
-
-  useEffect(() => {
-    console.log(selectedAvatar)
-  })
 
   useEffect(() => {
     const getAvatar = async () => {
@@ -124,7 +120,7 @@ function SetAvatar() {
     <>
       {loading ? (
         <Container>
-          <Lottie options={lottieOption} height={400} width={400} />
+          <Lottie  animationData={dotLoading} loop={true} autoPlay={true} height={400} width={400} />
         </Container>
       ) : (
         <Container>

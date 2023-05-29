@@ -4,7 +4,6 @@ import Logout from "./Logout"
 import ChatInput from "./ChatInput"
 import axios from "axios"
 import { getAllMessageRoute, sendMessageRoute } from "../utils/APIroute"
-import { v4 as uuidv4 } from "uuid"
 
 function ChatRoom({ currentChat, socket }) {
   const [messages, setMessages] = useState([])
@@ -30,7 +29,6 @@ function ChatRoom({ currentChat, socket }) {
   }
 
   useEffect(() => {
-    console.log(arrivalMessage)
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage])
   }, [arrivalMessage])
 
@@ -43,7 +41,6 @@ function ChatRoom({ currentChat, socket }) {
 
     if (!ignore) {
       socket.on("recieve-msg", (msg) => {
-        console.log(msg)
         setArrivalMessage({ fromSelf: false, message: msg })
       })
     }
@@ -66,8 +63,6 @@ function ChatRoom({ currentChat, socket }) {
 
     getMessage()
   }, [currentChat])
-
-  console.log(uuidv4())
 
   return (
     <Container>

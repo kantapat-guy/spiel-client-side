@@ -1,15 +1,15 @@
 import React from "react"
 import { styled } from "styled-components"
-import * as Hello from "../assets/hello.json"
-import Lottie from "react-lottie"
+import Hello from "../assets/hello.json"
+import Lottie from "lottie-react"
 import Logout from "./Logout"
 
 function Welcome({ user }) {
-  const lottieOption = {
-    loop: true,
-    autoplay: true,
-    animationData: Hello,
-  }
+  // const lottieOption = {
+  //   loop: true,
+  //   autoplay: true,
+  //   animationData: Hello,
+  // }
 
   return (
     <AllContainer>
@@ -18,7 +18,7 @@ function Welcome({ user }) {
       </BtnContainer>
       <Container>
         <div className="img">
-          <Lottie options={lottieOption} />
+          <Lottie animationData={Hello} loop={true} autoPlay={true} />
         </div>
         <h1>{`Welcome, ${user.username}`}</h1>
         <p>Please select a chat to start messaging</p>

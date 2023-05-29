@@ -2,8 +2,6 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 import LogOut from "../assets/logout.png"
 import styled from "styled-components"
-import axios from "axios"
-// import { logoutRoute } from "../utils/APIRoutes"
 
 export default function Logout() {
   const navigate = useNavigate()
@@ -11,7 +9,7 @@ export default function Logout() {
     const id = await JSON.parse(localStorage.getItem("spiel-user"))._id
     // const data = await axios.get(`${logoutRoute}/${id}`)
     // if (data.status === 200) {
-    localStorage.clear()
+    localStorage.removeItem("spiel-user")
     navigate("/login")
     // }
   }

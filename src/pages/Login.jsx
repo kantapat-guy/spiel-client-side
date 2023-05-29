@@ -24,24 +24,43 @@ function Login() {
     const { username, password } = value
     e.preventDefault()
     if (handleValidate(username, password)) {
-      const { data } = await axios.post(loginRoute, {
-        username,
-        password,
-      })
+      let data
 
-      if (data.status === false) {
-        toast.error(data.msg, {
-          position: "bottom-right",
-          autoClose: false,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "dark",
+      await axios
+        .post(loginRoute, {
+          username,
+          password,
         })
-      } else {
-        toast.success("Login success.", option)
-        localStorage.setItem("spiel-user", JSON.stringify(data.existedUser))
-        navigate('/')
-      }
+        .then((response) => {
+          data = response.data
+          toast.success("Login success.", option)
+          localStorage.setItem("spiel-user", JSON.stringify(data.existedUser))
+          navigate("/")
+        })
+        .catch((error) => {
+          console.log(error.message)
+          toast.error(error?.response.data.msg, {
+            position: "bottom-right",
+            autoClose: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "dark",
+          })
+        })
+
+      // if (data.status === false) {
+      //   toast.error(data.msg, {
+      //     position: "bottom-right",
+      //     autoClose: false,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     theme: "dark",
+      //   })
+      // } else {
+      //   toast.success("Login success.", option)
+      //   localStorage.setItem("spiel-user", JSON.stringify(data.existedUser))
+      //   navigate("/")
+      // }
     }
   }
 
@@ -68,10 +87,10 @@ function Login() {
   }
 
   useEffect(() => {
-    if(localStorage.getItem('spiel-user')) {
-        navigate('/')
+    if (localStorage.getItem("spiel-user")) {
+      navigate("/")
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

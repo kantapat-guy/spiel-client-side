@@ -42,7 +42,7 @@ const Container = styled.div`
   flex-direction: column;
   color: white;
   .img {
-    height: 30vh;
+    width: 30vh;
   }
 `
 

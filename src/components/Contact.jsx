@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { styled } from "styled-components"
 import LogoChat from "../assets/chat.png"
+import { Link, useNavigate } from "react-router-dom"
 
 function Contact({ contact, user, setCurrentChat }) {
   const [currentUser, setCurrentUser] = useState([])
   const [currentSelected, setCurrentSelected] = useState("")
+  const navigate = useNavigate()
 
   const handleCurrentChat = (idx, contact) => {
     setCurrentSelected(idx)
@@ -54,7 +56,9 @@ function Contact({ contact, user, setCurrentChat }) {
               />
             </div>
             <div className="username">
-              <h2>{user.username}</h2>
+              <h2>
+                <Link to="/set_avatar">{user.username}</Link>
+              </h2>
             </div>
           </div>
         </Container>
@@ -119,8 +123,8 @@ const Container = styled.div`
       }
     }
     .selected {
-        background-color: #9186f3;
-      }
+      background-color: #9186f3;
+    }
   }
 
   .currentUser {
@@ -137,6 +141,11 @@ const Container = styled.div`
     }
     .username {
       h2 {
+        color: white;
+      }
+      a {
+        text-decoration: none;
+        font-weight: bold;
         color: white;
       }
     }
